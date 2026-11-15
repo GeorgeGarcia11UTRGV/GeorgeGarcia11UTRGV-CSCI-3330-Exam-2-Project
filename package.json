@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/GeorgeGarcia11UTRGV/GeorgeGarcia11UTRGV-CSCI-3330-Exam-2-Project/issues"
   },
-  "homepage": "https://github.com/GeorgeGarcia11UTRGV/GeorgeGarcia11UTRGV-CSCI-3330-Exam-2-Project#readme"
+  "homepage": "https://github.com/GeorgeGarcia11UTRGV/GeorgeGarcia11UTRGV-CSCI-3330-Exam-2-Project#readme",
+  "dependencies": {
+    "ejs": "^7.0.2",
+    "express": "^5.3.0"
+  }
 }
