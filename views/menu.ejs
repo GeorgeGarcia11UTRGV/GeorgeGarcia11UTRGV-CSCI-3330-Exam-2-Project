@@ -1,1 +1,66 @@
-<h1>Menu Page Working - Items: <%= menu.length %></h1>
+<%- include('partials/header') %>
+
+<h1>Our Menu</h1>
+<div class="menu-layout">
+    <div class="menu-items-section">
+        <% menu.forEach(item => { %>
+            <div class="menu-card">
+                <div class="menu-details">
+                    <h3><%= item.name %> <span class="price-tag">$<%= item.price.toFixed(2) %></span></h3>
+                    <span class="category-lbl"><%= item.category %></span>
+                    <p><%= item.description %></p>
+                </div>
+                
+                <div class="reviews-display">
+                    <h4>Customer Reviews</h4>
+                    <% if (item.reviews && item.reviews.length > 0) { %>
+                        <ul>
+                            <% item.reviews.forEach(rev => { %>
+                                <li><strong><%= rev.customerName %></strong> (<%= rev.rating %> ★): "<%= rev.comment %>"</li>
+                            <% }) %>
+                        </ul>
+                    <% } else { %>
+                        <p class="no-data">No reviews yet for this product.</p>
+                    <% } %>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+
+    <div class="form-sidebar">
+        <h3>Submit Product Review</h3>
+        <form action="/reviews" method="POST">
+            <div class="form-group">
+                <label for="itemId">Select Item:</label>
+                <select name="itemId" id="itemId" required>
+                    <% menu.forEach(item => { %>
+                        <option value="<%= item.itemId %>"><%= item.name %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="customerName">Your Name:</label>
+                <input type="text" name="customerName" id="customerName" placeholder="Enter name" required>
+            </div>
+            <div class="form-group">
+                <label for="rating">Rating (1-5):</label>
+                <select name="rating" id="rating" required>
+                    <option value="5">5 Stars - Excellent</option>
+                    <option value="4">4 Stars - Very Good</option>
+                    <option value="3">3 Stars - Good</option>
+                    <option value="2">2 Stars - Fair</option>
+                    <option value="1">1 Star - Poor</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="comment">Feedback Comment:</label>
+                <textarea name="comment" id="comment" rows="3" placeholder="Share your experience..."></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Post Review</button>
+        </form>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
+
+

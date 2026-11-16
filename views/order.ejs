@@ -1,1 +1,72 @@
-<h1>Order Page Working</h1>
+<%- include('partials/header') %>
+
+<h1>Place an Advance Pickup Order</h1>
+
+<div class="order-container">
+    <div class="order-form-box">
+        <h3>Select Items & Pickup Details</h3>
+        <form action="/order" method="POST">
+            <div class="form-group">
+                <label for="customerName">Full Name:</label>
+                <input type="text" name="customerName" id="customerName" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+                <label for="customerEmail">Email Address:</label>
+                <input type="email" name="customerEmail" id="customerEmail" placeholder="you@email.com" required>
+            </div>
+            <div class="form-group">
+                <label for="itemId">Choose Product:</label>
+                <select name="itemId" id="itemId" required>
+                    <% menu.forEach(item => { %>
+                        <option value="<%= item.itemId %>"><%= item.name %> — $<%= item.price.toFixed(2) %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="quantity" id="quantity" min="1" max="10" value="1" required>
+            </div>
+            <div class="form-group">
+                <label for="pickupTime">Desired Pickup Time:</label>
+                <input type="time" name="pickupTime" id="pickupTime" required>
+            </div>
+            <div class="form-group">
+                <label for="customizedNotes">Special Customization Notes:</label>
+                <textarea name="customizedNotes" id="customizedNotes" rows="2" placeholder="e.g., Oat milk, extra hot..."></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Submit Order Request</button>
+        </form>
+    </div>
+
+    <div class="receipt-box">
+        <h3>Order Receipt Summary</h3>
+        <% if (receipt) { %>
+            <div class="receipt-card">
+                <div class="receipt-success-header">✓ Order Confirmed!</div>
+                <p><strong>Receipt Number:</strong> #CX-00<%= receipt.order.orderId %></p>
+                <p><strong>Customer Associated:</strong> <%= receipt.user.name %> (<%= receipt.user.email %>)</p>
+                <p><strong>Submission Timestamp:</strong> <%= receipt.order.timestamp %></p>
+                <p><strong>Scheduled Pickup Time:</strong> <%= receipt.order.pickupTime %></p>
+                <hr>
+                <p><strong>Item Selected:</strong> <%= receipt.menuItem.name %> (x<%= receipt.orderItem.quantity %>)</p>
+                <% if (receipt.orderItem.customizedNotes) { %>
+                    <p class="receipt-notes"><em>Notes: "<%= receipt.orderItem.customizedNotes %>"</em></p>
+                <% } %>
+                <hr>
+                <table class="totals-table">
+                    <tr><td>Subtotal:</td><td class="text-right">$<%= receipt.subtotal %></td></tr>
+                    <tr><td>Tax (8.25%):</td><td class="text-right">$<%= receipt.tax %></td></tr>
+                    <tr class="total-row"><td>Total Charged:</td><td class="text-right">$<%= receipt.total %></td></tr>
+                </table>
+                <p class="status-badge">Fulfillment Status: <strong><%= receipt.order.status.toUpperCase() %></strong></p>
+            </div>
+        <% } else { %>
+            <div class="receipt-placeholder">
+                <p>No active session found. Fill out the request form on the left side to compile your order total.</p>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
+

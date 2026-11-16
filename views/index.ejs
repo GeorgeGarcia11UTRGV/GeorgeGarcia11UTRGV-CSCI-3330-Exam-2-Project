@@ -1,1 +1,23 @@
-<h1>Home Page Working</h1>
+<%- include('partials/header') %>
+
+<div class="hero-section">
+    <h1>Welcome to CaffeineExpress</h1>
+    <p>Skip the line! Order your favorite fresh coffee and artisan pastries ahead for lightning-fast pickup.</p>
+    <a href="/order" class="btn">Order Ahead Now</a>
+</div>
+
+<section class="featured-products">
+    <h2>Popular Highlights</h2>
+    <div class="item-grid">
+        <% featuredItems.forEach(item => { %>
+            <div class="product-card">
+                <h3><%= item.name %></h3>
+                <span class="badge"><%= item.category %></span>
+                <p class="desc"><%= item.description %></p>
+                <p class="price">$<%= item.price.toFixed(2) %></p>
+            </div>
+        <% }) %>
+    </div>
+</section>
+
+<%- include('partials/footer') %>

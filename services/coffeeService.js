@@ -1,4 +1,3 @@
-
 class User {
     constructor(userId, name, email, role) {
         this.userId = userId;
@@ -73,12 +72,18 @@ const getMenuData = async () => {
     });
 };
 
-const createOrder = async ({ customerName, customerEmail, pickupTime, itemId, quantity, customizedNotes }) => {
+const getAllUsers = async () => {
+    return users;
+};
 
+const createOrder = async ({ customerName, customerEmail, pickupTime, itemId, quantity, customizedNotes }) => {
     let user = users.find(u => u.email === customerEmail);
+    
     if (!user) {
         user = new User(users.length + 1, customerName, customerEmail, 'customer');
         users.push(user);
+    } else {
+        user.name = customerName;
     }
 
     const newOrder = new Order(
@@ -86,7 +91,7 @@ const createOrder = async ({ customerName, customerEmail, pickupTime, itemId, qu
         user.userId,
         new Date().toLocaleTimeString(),
         pickupTime,
-        'pending', 
+        'pending'
     );
     orders.push(newOrder);
 
@@ -156,9 +161,9 @@ const addReview = async ({ itemId, customerName, rating, comment }) => {
     return newReview;
 };
 
-
 module.exports = {
     getMenuData,
+    getAllUsers,
     createOrder,
     getPendingOrders,
     updateOrderStatus,

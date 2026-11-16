@@ -49,7 +49,8 @@ const handleOrderSubmit = async (req, res, next) => {
 const renderDashboard = async (req, res, next) => {
     try {
         const pendingOrders = await coffeeService.getPendingOrders();
-        res.render('dashboard', { title: 'Staff Dashboard', pendingOrders });
+        const users = await coffeeService.getAllUsers();
+        res.render('dashboard', { title: 'Staff Dashboard', pendingOrders, users });
     } catch (err) {
         next(err);
     }
@@ -71,5 +72,5 @@ module.exports = {
     renderOrderPage,
     handleOrderSubmit,
     renderDashboard,
-    handleStatusUpdate,
+    handleStatusUpdate
 };

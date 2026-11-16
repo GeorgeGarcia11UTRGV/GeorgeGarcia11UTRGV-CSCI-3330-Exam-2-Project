@@ -1,1 +1,64 @@
-<h1>Dashboard Working - Pending: <%= pendingOrders.length %></h1>
+<%- include('partials/header') %>
+
+<h1>Employee Fulfillment Console</h1>
+
+<div class="menu-layout">
+    <div class="menu-items-section">
+        <h2>Active Pending Pickup Orders</h2>
+        <% if (pendingOrders && pendingOrders.length > 0) { %>
+            <% pendingOrders.forEach(order => { %>
+                <div class="order-dashboard-card">
+                    <div class="order-card-title">
+                        <h3>Order #<%= order.orderId %></h3>
+                        <span class="time-lbl">Pickup: <strong><%= order.pickupTime %></strong></span>
+                    </div>
+                    <p><strong>Customer Name:</strong> <%= order.customerName %></p>
+                    <p><strong>Placed At:</strong> <%= order.timestamp %></p>
+                    
+                    <div class="items-ordered-box">
+                        <h4>Items Requested:</h4>
+                        <ul>
+                            <% order.items.forEach(item => { %>
+                                <li>
+                                    <%= item.itemName %> (x<%= item.quantity %>)
+                                    <% if (item.customizedNotes) { %>
+                                        <br><small class="no-data">Notes: "<%= item.customizedNotes %>"</small>
+                                    <% } %>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                    
+                    <form action="/orders/<%= order.orderId %>/status?role=employee" method="POST" class="status-action-form">
+                        <label for="status-<%= order.orderId %>">Update Status:</label>
+                        <select name="status" id="status-<%= order.orderId %>">
+                            <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                            <option value="ready">Mark as Ready</option>
+                            <option value="completed">Complete Order</option>
+                        </select>
+                        <button type="submit" class="btn-update">Update</button>
+                    </form>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="menu-card">
+                <p class="no-data">Great job! There are no pending coffee orders left to fulfill right now.</p>
+            </div>
+        <% } %>
+    </div>
+
+    <div class="form-sidebar">
+        <h3>Registered Directory</h3>
+        <p class="no-data" style="margin-bottom: 15px;">Core user database accounts registry overview:</p>
+        
+        <% users.forEach(user => { %>
+            <div style="background: white; border: 1px solid lightgray; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
+                <p><strong>Name:</strong> <%= user.name %></p>
+                <p style="font-size: 13px; color: darkgray;"><strong>Email:</strong> <%= user.email %></p>
+                <span class="role-badge <%= user.role %>" style="margin-top: 5px;"><%= user.role.toUpperCase() %></span>
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
